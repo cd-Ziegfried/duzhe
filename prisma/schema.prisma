@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model bookmarks {
+  user_id    Int
+  series_id  Int
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "bookmarks_ibfk_1")
+  series     series   @relation(fields: [series_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "bookmarks_ibfk_2")
+
+  @@id([user_id, series_id])
+  @@index([series_id], map: "series_id")
+}
+
+model chapter_pages {
+  id          Int      @id @default(autoincrement())
+  chapter_id  Int
+  page_number Int
+  image_url   String   @db.VarChar(255)
+  chapters    chapters @relation(fields: [chapter_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "chapter_pages_ibfk_1")
+
+  @@unique([chapter_id, page_number], map: "uniq_chapter_page")
+}
+
+model chapter_text {
+  chapter_id Int      @id
+  body       String   @db.LongText
+  chapters   chapters @relation(fields: [chapter_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "chapter_text_ibfk_1")
+}
+
+model chapters {
+  id               Int                @id @default(autoincrement())
+  series_id        Int
+  chapter_number   Decimal            @db.Decimal(6, 1)
+  title            String?            @db.VarChar(200)
+  published_at     DateTime           @default(now()) @db.Timestamp(0)
+  chapter_pages    chapter_pages[]
+  chapter_text     chapter_text?
+  series           series             @relation(fields: [series_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "chapters_ibfk_1")
+  comments         comments[]
+  reading_progress reading_progress[]
+
+  @@unique([series_id, chapter_number], map: "uniq_series_chapter")
+}
+
+model comments {
+  id         Int      @id @default(autoincrement())
+  chapter_id Int
+  user_id    Int
+  body       String   @db.Text
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  chapters   chapters @relation(fields: [chapter_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "comments_ibfk_1")
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "comments_ibfk_2")
+
+  @@index([chapter_id], map: "chapter_id")
+  @@index([user_id], map: "user_id")
+}
+
+model genres {
+  id            Int             @id @default(autoincrement())
+  name          String          @unique(map: "name") @db.VarChar(60)
+  series_genres series_genres[]
+}
+
+model reading_progress {
+  user_id        Int
+  series_id      Int
+  chapter_id     Int
+  scroll_percent Int?     @default(0) @db.UnsignedTinyInt
+  updated_at     DateTime @default(now()) @db.Timestamp(0)
+  users          users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "reading_progress_ibfk_1")
+  series         series   @relation(fields: [series_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "reading_progress_ibfk_2")
+  chapters       chapters @relation(fields: [chapter_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "reading_progress_ibfk_3")
+
+  @@id([user_id, series_id])
+  @@index([chapter_id], map: "chapter_id")
+  @@index([series_id], map: "series_id")
+}
+
+model series {
+  id               Int                @id @default(autoincrement())
+  title            String             @db.VarChar(200)
+  slug             String             @unique(map: "slug") @db.VarChar(220)
+  author           String?            @db.VarChar(150)
+  synopsis         String?            @db.Text
+  cover_color      String?            @default("#2E2A3A") @db.VarChar(7)
+  type             series_type
+  status           series_status      @default(ongoing)
+  created_by       Int?
+  created_at       DateTime           @default(now()) @db.Timestamp(0)
+  bookmarks        bookmarks[]
+  chapters         chapters[]
+  reading_progress reading_progress[]
+  users            users?             @relation(fields: [created_by], references: [id], onUpdate: Restrict, map: "series_ibfk_1")
+  series_genres    series_genres[]
+
+  @@index([created_by], map: "created_by")
+}
+
+model series_genres {
+  series_id Int
+  genre_id  Int
+  series    series @relation(fields: [series_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "series_genres_ibfk_1")
+  genres    genres @relation(fields: [genre_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "series_genres_ibfk_2")
+
+  @@id([series_id, genre_id])
+  @@index([genre_id], map: "genre_id")
+}
+
+model users {
+  id               Int                @id @default(autoincrement())
+  email            String             @unique(map: "email") @db.VarChar(190)
+  password_hash    String             @db.VarChar(255)
+  display_name     String             @db.VarChar(100)
+  role             users_role         @default(reader)
+  created_at       DateTime           @default(now()) @db.Timestamp(0)
+  bookmarks        bookmarks[]
+  comments         comments[]
+  reading_progress reading_progress[]
+  series           series[]
+}
+
+enum users_role {
+  reader
+  admin
+}
+
+enum series_type {
+  novel
+  manga
+  manhwa
+  comic
+}
+
+enum series_status {
+  ongoing
+  completed
+  hiatus
+}
