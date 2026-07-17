@@ -2,6 +2,16 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+``` Author comment
+npm install
+npm install prisma --save-dev
+npm install @prisma/client
+npx prisma init --datasource-provider mysql
+
+If no doenv, install it
+npm install dotenv
+```
+
 First, run the development server:
 
 ```bash
