@@ -90,6 +90,7 @@ model series {
   author           String?            @db.VarChar(150)
   synopsis         String?            @db.Text
   cover_color      String?            @default("#2E2A3A") @db.VarChar(7)
+  cover_url        String?            @db.VarChar(255)
   type             series_type
   status           series_status      @default(ongoing)
   created_by       Int?

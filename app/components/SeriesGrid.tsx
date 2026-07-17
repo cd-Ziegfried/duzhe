@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { initials } from "../lib/format";
+import Image from "next/image";
 
 type SeriesCardData = {
   id: number;
@@ -7,6 +8,7 @@ type SeriesCardData = {
   author: string | null;
   type: string;
   cover_color: string;
+  cover_url: string | null;
 };
 
 export default function SeriesGrid({
@@ -27,12 +29,25 @@ export default function SeriesGrid({
             <div
               className="cover"
               style={{
-                background: `linear-gradient(160deg, ${s.cover_color} 0%, var(--bg) 130%)`,
+                background: s.cover_url
+                  ? undefined
+                  : `linear-gradient(160deg, ${s.cover_color} 0%, var(--bg) 130%)`,
                 ["--accent" as any]: isProse ? "var(--gold)" : "var(--red)",
               }}
             >
-              <span className="stamp">{initials(s.title)}</span>
-              <p className="cover-title">{s.title}</p>
+              {s.cover_url ? (
+                <Image
+                  src={s.cover_url}
+                  alt={s.title}
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              ) : (
+                <>
+                  <span className="stamp">{initials(s.title)}</span>
+                  <p className="cover-title">{s.title}</p>
+                </>
+              )}
             </div>
             <div className="card-meta">
               <div className="row">
