@@ -131,15 +131,13 @@ enum users_role {
   admin
 }
 
-enum series_type {
-  novel
-  manga
-  manhwa
-  comic
-}
-
 enum series_status {
   ongoing
   completed
   hiatus
+}
+
+enum series_type {
+  novel
+  comic
 }
