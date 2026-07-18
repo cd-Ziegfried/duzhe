@@ -1,8 +1,11 @@
 import Header from "@/app/components/Header";
+import { getCurrentUser } from "@/app/lib/auth";
 import { initials } from "@/app/lib/format";
 import { prisma } from "@/app/lib/prisma";
+import { revalidatePath } from "next/cache";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+getCurrentUser;
 
 export default async function SeriesDetail({
   params,
@@ -19,6 +22,48 @@ export default async function SeriesDetail({
       chapters: { orderBy: { chapter_number: "desc" } },
     },
   });
+
+  const user = await getCurrentUser();
+  let isBookmarked = false;
+
+  let resumeChapterId: number | null = null;
+  if (user) {
+    const progress = await prisma.reading_progress.findUnique({
+      where: { user_id_series_id: { user_id: user.id, series_id: series.id } },
+    });
+  }
+
+  if (user) {
+    const bookmark = await prisma.bookmarks.findUnique({
+      where: { user_id_series_id: { user_id: user.id, series_id: series.id } },
+    });
+    isBookmarked = !!bookmark;
+  }
+
+  async function toggleBookmark() {
+    "use server";
+    const current = await getCurrentUser();
+    if (!current) redirect("/login");
+
+    const existing = await prisma.bookmarks.findUnique({
+      where: {
+        user_id_series_id: { user_id: current.id, series_id: series!.id },
+      },
+    });
+
+    if (existing) {
+      await prisma.bookmarks.delete({
+        where: {
+          user_id_series_id: { user_id: current.id, series_id: series!.id },
+        },
+      });
+    } else {
+      await prisma.bookmarks.create({
+        data: { user_id: current.id, series_id: series!.id },
+      });
+    }
+    revalidatePath(`/series/${series!.id}`);
+  }
 
   if (!series) {
     notFound();
@@ -79,16 +124,27 @@ export default async function SeriesDetail({
 
             {series.chapters.length > 0 && (
               <Link
-                href={`/read/${series.chapters[series.chapters.length - 1].id}`}
+                href={`/read/${resumeChapterId ?? series.chapters[series.chapters.length - 1].id}`}
                 className="btn btn-primary"
                 style={{
                   ["--accent" as any]: accent,
-                  marginTop: 16,
                   display: "inline-flex",
                 }}
               >
-                Start reading
+                {resumeChapterId ? "Continue reading" : "Start reading"}
               </Link>
+            )}
+
+            {user ? (
+              <form action={toggleBookmark}>
+                <button className="btn btn-ghost" type="submit">
+                  {isBookmarked ? "★ Saved" : "☆ Save"}
+                </button>
+              </form>
+            ) : (
+              <a className="btn btn-ghost" href="/login">
+                Save
+              </a>
             )}
           </div>
         </div>

@@ -1,3 +1,5 @@
+import ProgressTracker from "@/app/components/ProgressTracker";
+import { getCurrentUser } from "@/app/lib/auth";
 import { prisma } from "@/app/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -17,6 +19,8 @@ export default async function ReadChapter({
       chapter_pages: { orderBy: { page_number: "asc" } },
     },
   });
+
+  const user = await getCurrentUser();
 
   if (!chapter) {
     notFound();
@@ -71,6 +75,9 @@ export default async function ReadChapter({
           </div>
         )}
       </div>
+      {user && (
+        <ProgressTracker seriesId={chapter.series_id} chapterId={chapterId} />
+      )}
     </main>
   );
 }

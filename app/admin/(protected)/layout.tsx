@@ -29,6 +29,9 @@ export default async function AdminLayout({
         <Link className="nav-item" href="/admin/series">
           Series
         </Link>
+        <Link className="nav-item" href="/admin/chapters">
+          Chapters
+        </Link>
         <div style={{ marginTop: "auto", paddingTop: 20 }}>
           <form action={logout}>
             <button

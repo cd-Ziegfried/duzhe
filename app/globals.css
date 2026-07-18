@@ -480,3 +480,15 @@ textarea.field {
   resize: vertical;
   font-family: "Inter", sans-serif;
 }
+
+.field-row {
+  display: flex;
+  gap: 12px;
+}
+.field-row > div {
+  flex: 1;
+}
+
+.btn-ghost {
+  background: transparent;
+}
