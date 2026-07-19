@@ -28,14 +28,14 @@ export default async function SeriesDetail({
   let resumeChapterId: number | null = null;
   if (user) {
     const progress = await prisma.reading_progress.findUnique({
-      where: { user_id_series_id: { user_id: user.id, series_id: series.id } },
+      where: { user_id_series_id: { user_id: user.id, series_id: series!.id } },
     });
     resumeChapterId = progress?.chapter_id ?? null;
   }
 
   if (user) {
     const bookmark = await prisma.bookmarks.findUnique({
-      where: { user_id_series_id: { user_id: user.id, series_id: series.id } },
+      where: { user_id_series_id: { user_id: user.id, series_id: series!.id } },
     });
     isBookmarked = !!bookmark;
   }
