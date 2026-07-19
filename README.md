@@ -7,6 +7,8 @@ npm install
 npm install prisma --save-dev
 npm install @prisma/client
 npx prisma init --datasource-provider mysql
+npm install bcryptjs
+npm install @tiptap/react @tiptap/starter-kit @tiptap/pm
 
 If no doenv, install it
 npm install dotenv
