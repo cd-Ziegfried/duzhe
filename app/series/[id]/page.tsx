@@ -5,7 +5,6 @@ import { prisma } from "@/app/lib/prisma";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-getCurrentUser;
 
 export default async function SeriesDetail({
   params,
@@ -31,6 +30,7 @@ export default async function SeriesDetail({
     const progress = await prisma.reading_progress.findUnique({
       where: { user_id_series_id: { user_id: user.id, series_id: series.id } },
     });
+    resumeChapterId = progress?.chapter_id ?? null;
   }
 
   if (user) {
@@ -85,7 +85,7 @@ export default async function SeriesDetail({
             <div
               className="cover"
               style={{
-                height: 260,
+                height: 310,
                 background: `linear-gradient(160deg, ${series.cover_color} 0%, var(--bg) 130%)`,
                 ["--accent" as any]: accent,
               }}

@@ -181,7 +181,7 @@ main {
 }
 
 .detail-cover {
-  width: 190px;
+  width: 250px;
   flex-shrink: 0;
 }
 
@@ -219,8 +219,9 @@ main {
 .synopsis {
   font-family: "Lora", serif;
   font-size: 15.5px;
+  margin-top: -10px;
   line-height: 1.65;
-  max-width: 560px;
+  max-width: 900px;
   opacity: 0.9;
 }
 
@@ -288,23 +289,67 @@ main {
   font-family: "Bebas Neue", sans-serif;
   font-size: 13px;
   letter-spacing: 0.1em;
-  margin-bottom: 4px;
 }
 .chapter-heading {
   font-family: "Lora", serif;
   font-style: italic;
   font-size: 24px;
-  margin: 0 0 28px;
 }
 
 .novel-body {
   font-family: "Lora", serif;
   font-size: 17px;
-  line-height: 1.85;
+  line-height: 1.9;
 }
 .novel-body p {
-  margin-bottom: 22px;
+  margin-bottom: 24px;
   opacity: 0.92;
+}
+.novel-body p:first-of-type::first-letter {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 52px;
+  float: left;
+  line-height: 0.8;
+  padding: 6px 8px 0 0;
+  color: var(--gold);
+}
+.novel-body h2 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 26px;
+  letter-spacing: 0.01em;
+  margin: 40px 0 16px;
+}
+.novel-body blockquote {
+  border-left: 3px solid var(--gold);
+  padding-left: 18px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--muted);
+}
+.novel-body ul,
+.novel-body ol {
+  margin: 0 0 22px 22px;
+  padding: 0;
+}
+.novel-body li {
+  margin-bottom: 8px;
+  opacity: 0.92;
+}
+.novel-body hr {
+  border: none;
+  text-align: center;
+  margin: 36px 0;
+  color: var(--faint);
+}
+.novel-body hr::before {
+  content: "❦";
+  font-size: 16px;
+}
+.novel-body strong {
+  color: var(--text);
+}
+.novel-body em {
+  color: var(--text);
 }
 
 .page-scroll {
@@ -491,4 +536,60 @@ textarea.field {
 
 .btn-ghost {
   background: transparent;
+}
+
+.editor-shell {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.editor-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.editor-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  width: 30px;
+  height: 28px;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+.editor-btn.active {
+  background: var(--surface-raised);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.editor-body {
+  padding: 12px;
+  min-height: 220px;
+}
+.editor-body .ProseMirror {
+  outline: none;
+  font-family: "Lora", serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+}
+.editor-body .ProseMirror p {
+  margin: 0 0 14px;
+}
+.editor-body .ProseMirror h2 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 22px;
+  margin: 18px 0 10px;
+}
+.editor-body .ProseMirror blockquote {
+  border-left: 3px solid var(--gold);
+  padding-left: 14px;
+  font-style: italic;
+  color: var(--muted);
+  margin: 14px 0;
 }

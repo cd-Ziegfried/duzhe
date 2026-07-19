@@ -39,10 +39,14 @@ export default async function ReadChapter({
           </Link>
         </div>
 
-        <p className="chapter-eyebrow" style={{ color: accent }}>
-          CHAPTER {chapterNum}
-        </p>
-        {chapter.title && <h2 className="chapter-heading">{chapter.title}</h2>}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <p className="chapter-eyebrow" style={{ color: accent }}>
+            CHAPTER {chapterNum} -
+          </p>
+          {chapter.title && (
+            <h2 className="chapter-heading">{chapter.title}</h2>
+          )}
+        </div>
 
         {isProse ? (
           <div
@@ -76,7 +80,7 @@ export default async function ReadChapter({
         )}
       </div>
       {user && (
-        <ProgressTracker seriesId={chapter.series_id} chapterId={chapterId} />
+        <ProgressTracker seriesId={chapter.series_id} chapterId={chapter.id} />
       )}
     </main>
   );

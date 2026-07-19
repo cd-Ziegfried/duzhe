@@ -12,7 +12,7 @@ async function logout() {
 export default async function Header({
   active,
 }: {
-  active: "novels" | "comics";
+  active: "novels" | "comics" | "library";
 }) {
   const user = await getCurrentUser();
 

@@ -19,7 +19,7 @@ export default async function MyLibraryPage() {
 
   return (
     <>
-      <Header active="novels" />
+      <Header active="library" />
       <main>
         <h1 className="display" style={{ fontSize: 30, marginBottom: 20 }}>
           My Library

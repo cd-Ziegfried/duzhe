@@ -1,5 +1,6 @@
 "use client";
 
+import RichTextEditor from "@/app/components/RichTextEditor";
 import { useState } from "react";
 
 type SeriesOption = { id: number; title: string; type: string };
@@ -16,7 +17,6 @@ export default function ChapterForm({
   return (
     <form
       action={action}
-      encType="multipart/form-data"
       className="form-card"
       style={{ marginTop: 20, maxWidth: 560 }}
     >
@@ -66,12 +66,7 @@ export default function ChapterForm({
       {selectedType === "novel" && (
         <>
           <label className="field-label">Chapter text</label>
-          <textarea
-            className="field"
-            name="body"
-            rows={8}
-            placeholder="Write the chapter body (HTML allowed)..."
-          />
+          <RichTextEditor name="body" />
         </>
       )}
 
