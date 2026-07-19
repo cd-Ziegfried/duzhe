@@ -86,7 +86,7 @@ export default async function SeriesDetail({
               className="cover"
               style={{
                 height: 310,
-                background: `linear-gradient(160deg, ${series.cover_color} 0%, var(--bg) 130%)`,
+                background: `linear-gradient(160deg, ${series.cover_color || "#2E2A3A"} 0%, var(--bg) 130%)`,
                 ["--accent" as any]: accent,
               }}
             >

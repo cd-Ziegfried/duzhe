@@ -7,7 +7,7 @@ type SeriesCardData = {
   title: string;
   author: string | null;
   type: string;
-  cover_color: string;
+  cover_color: string | null;
   cover_url: string | null;
 };
 
